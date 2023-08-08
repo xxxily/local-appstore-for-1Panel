@@ -4,8 +4,8 @@
 app_local_dir="/opt/1panel/resource/apps/local"
 
 # AppStore的git仓库地址（必选）
-git_repo_url="https://github.com/xxxily/local-appstore-for-1Panel"
-# git_repo_url="https://github.com/1Panel-dev/appstore"
+# git_repo_url="https://github.com/xxxily/local-appstore-for-1Panel"
+git_repo_url="https://github.com/1Panel-dev/appstore"
 
 # 访问git仓库的access token，访问私有仓库时用，优先级高于账密（可选）
 # 建议使用access token，降低账密泄露的风险
@@ -26,6 +26,13 @@ clean_local_app=false
 # 拉取远程仓库前是否清空远程app缓存（可选）
 clean_remote_app_cache=false
 
+# 设置克隆或拉取远程仓库时使用的代理（可选）
+proxyUrl=""
+# 设置示例：
+# proxyUrl="http://127.0.0.1:7890"
+# proxyUrl="socks5://127.0.0.1:7890"
+# proxyUrl="socks5://user:password@host:port"
+
 # 将远程app store工程克隆到本地的工作目录
 work_dir="/opt/1panel_hepler"
 
@@ -39,13 +46,13 @@ logs() {
   if [ -n "$log_file" ]; then
     mkdir -p "$(dirname "$log_file")"
     if [ $? -eq 0 ]; then
-      echo "[$(date +"%Y-%m-%d %H:%M:%S")] $message"
+      echo -e "[$(date +"%Y-%m-%d %H:%M:%S")] $message"
       echo "[$(date +"%Y-%m-%d %H:%M:%S")] $message" >>"$log_file"
       return
     fi
   fi
 
-  echo "$message"
+  echo -e "$message"
 }
 
 # 函数: url_encode
@@ -126,6 +133,36 @@ function clone_git_repo() {
   fi
 }
 
+# 取消代理
+function proxy_off() {
+  unset http_proxy
+  unset https_proxy
+  unset ALL_PROXY
+  unset no_proxy
+  logs "Proxy Off"
+}
+
+# 开启代理
+function proxy_on() {
+  proxy_url="http://127.0.0.1:7890"
+  match_str="://"
+
+  if [ -n "$1" ]; then
+    if [[ $1 =~ $match_str ]]; then
+      proxy_url=$1
+    else
+      logs "Incorrect proxy_url, use defualt proxy_url"
+      return
+    fi
+  fi
+
+  export http_proxy=$proxy_url
+  export https_proxy=$proxy_url
+  export ALL_PROXY=$proxy_url
+  export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+  logs "Proxy On $proxy_url"
+}
+
 function scriptInfo() {
   echo ""
   logs "##################################################################"
@@ -177,6 +214,11 @@ function main() {
     logs "已清空远程app的缓存数据"
   fi
 
+  # 根据proxyUrl变量的值决定是否开启代理
+  if [ -n "$proxyUrl" ]; then
+    proxy_on "$proxyUrl"
+  fi
+
   # clone或拉取远程仓库最新代码
   logs "准备获取远程仓库最新代码：$git_repo_url"
   if [ -d "$repo_dir" ]; then
@@ -217,6 +259,10 @@ function main() {
   # 根据clean_remote_app_cache变量的值决定是否清空远程app的缓存数据
   if [ "$clean_remote_app_cache" = true ]; then
     rm -rf "$repo_dir"
+  fi
+
+  if [ -n "$proxyUrl" ]; then
+    proxy_off
   fi
 
   logs "1panel本地app同步成功，enjoy it!"
