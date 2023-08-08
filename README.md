@@ -120,6 +120,14 @@ work_dir="/opt/1panel_hepler"
 | proxyUrl | 否 | 设置克隆或拉取远程仓库时使用的代理，一般来说国内克隆GitHub仓的时候用得到 |
 | work_dir | 是 | 将远程app store工程克隆到本地的工作目录，用于临时存放克隆下来的文件和脚本工作日志 |
 
+## 1Panel应用源
+
+| 应用源 | 地址 | 说明 |
+| --- | --- | --- |
+| 1Panel-appstore | [https://github.com/1Panel-dev/appstore](https://github.com/1Panel-dev/appstore) | 1Panel官方应用商店 |
+| okxlin-appstore | [https://github.com/okxlin/appstore](https://github.com/okxlin/appstore) | 基于1Panel的第三方应用商店 |
+| local-appstore-for-1Panel | [https://github.com/xxxily/local-appstore-for-1Panel](https://github.com/xxxily/local-appstore-for-1Panel) | 集成linuxserver的1Panel的第三方应用商店（待集成） |
+
 ## 相关链接
 
 - [1Panel](https://github.com/1Panel-dev/1Panel)
