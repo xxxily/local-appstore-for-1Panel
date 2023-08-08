@@ -122,11 +122,14 @@ work_dir="/opt/1panel_hepler"
 
 ## 1Panel应用源
 
-| 应用源 | 地址 | 说明 |
-| --- | --- | --- |
-| 1Panel-appstore | [https://github.com/1Panel-dev/appstore](https://github.com/1Panel-dev/appstore) | 1Panel官方应用商店 |
-| okxlin-appstore | [https://github.com/okxlin/appstore](https://github.com/okxlin/appstore) | 基于1Panel的第三方应用商店 |
-| local-appstore-for-1Panel | [https://github.com/xxxily/local-appstore-for-1Panel](https://github.com/xxxily/local-appstore-for-1Panel) | 集成linuxserver的1Panel的第三方应用商店（待集成） |
+| 应用源地址 | 说明 |
+| --- | --- |
+| [https://github.com/1Panel-dev/appstore](https://github.com/1Panel-dev/appstore) | 1Panel官方应用商店 |
+| [https://github.com/okxlin/appstore](https://github.com/okxlin/appstore) | 基于1Panel的第三方应用商店 |
+| [https://github.com/xxxily/local-appstore-for-1Panel](https://github.com/xxxily/local-appstore-for-1Panel) | 集成linuxserver的1Panel的第三方应用商店（待集成） |
+
+> 直接将上面的应用源地址粘贴到git_repo_url变量里即可使用  
+> PS: 如需集成多个应用源到自己的系统里，只需新建多个定时任务，然后设定不同的git_repo_url变量即可，另外不同地址的应用源更新频率不一样，建议根据自己的需求来设定不同任务的执行周期。
 
 ## 相关链接
 
