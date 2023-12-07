@@ -5,7 +5,7 @@ app_local_dir="/opt/1panel/resource/apps/local"
 
 # AppStore的git仓库地址（必选）
 # git_repo_url="https://github.com/xxxily/local-appstore-for-1Panel"
-git_repo_url="https://github.com/1Panel-dev/appstore"
+git_repo_url="https://github.com/okxlin/appstore"
 
 # 访问git仓库的access token，访问私有仓库时用，优先级高于账密（可选）
 # 建议使用access token，降低账密泄露的风险
@@ -20,6 +20,8 @@ git_password=""
 git_branch=""
 # 指定克隆的深度（可选）
 git_depth=1
+# 强制拉取最新代码（可防止因差异导致的拉取失败）
+git_force_pull=true
 
 # 拉取远程仓库前是否清空本地app目录（可选）
 clean_local_app=false
@@ -225,8 +227,15 @@ function main() {
     logs "执行git pull操作"
     cd "$repo_dir"
 
-    # 强行拉取最新代码
-    git pull --force 2>>"$log_file"
+    if [ "$git_force_pull" = true ]; then
+      # 强行拉取最新代码
+      git fetch --all 2>>"$log_file"
+      git reset --hard origin/$(git symbolic-ref --short -q HEAD) 2>>"$log_file"
+      logs "[git_force_pull][$(git symbolic-ref --short -q HEAD)] 已拉取最新代码"
+    else
+      git pull 2>>"$log_file"
+      logs "已拉取最新代码"
+    fi
   else
     logs "执行git clone操作"
     mkdir -p "$repo_user_dir"
